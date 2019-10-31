@@ -10,9 +10,7 @@ namespace CS321_W5D2_BlogAPI.Infrastructure.Data
     public class PostRepository : IPostRepository
     {
         private readonly AppDbContext _dbContext;
-        private Post post;
-
-        public PostRepository(AppDbContext dbContext) 
+        public PostRepository(AppDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -20,45 +18,44 @@ namespace CS321_W5D2_BlogAPI.Infrastructure.Data
         public Post Get(int id)
         {
             // TODO: Implement Get(id). Include related Blog and Blog.User
-            // throw new NotImplementedException();
-            return _dbContext.Posts.Include(x => x.Blog)
-                .ThenInclude(y => y.User)
-            .FirstOrDefault(x => x.Id == id);
-            
-            
+            //throw new NotImplementedException();
+            return _dbContext.Posts.Include(p => p.Blog)
+                .ThenInclude(b => b.User)
+                .FirstOrDefault(b => b.Id == id);
+
         }
 
         public IEnumerable<Post> GetBlogPosts(int blogId)
         {
             // TODO: Implement GetBlogPosts, return all posts for given blog id
             // TODO: Include related Blog and AppUser
-            // throw new NotImplementedException();
+            //throw new NotImplementedException();
             return _dbContext.Posts.Include(p => p.Blog)
-            .ThenInclude(b => b.User)
-            .Where(b => b.BlogId == blogId);
+                .ThenInclude(b => b.User).Where(p => p.BlogId == blogId);
         }
 
-        public Post Add(Post Post)
+        public Post Add(Post post)
         {
             // TODO: add Post
-            // throw new NotImplementedException();
+            //throw new NotImplementedException();
             _dbContext.Posts.Add(post);
             _dbContext.SaveChanges();
-            return Post;
-            
+            return post;
+
         }
 
         public Post Update(Post updatedPost)
         {
             // TODO: update Post
             // throw new NotImplementedException();
-            var currentPost = this.Get(updatedPost.Id);
-            if (currentPost == null) return null;
-            _dbContext.Entry(currentPost).CurrentValues
-                .SetValues(updatedPost);
-            _dbContext.Posts.Update(currentPost);
+            var existingItem = _dbContext.Posts.Find(updatedPost.Id);
+            if (existingItem == null) return null;
+            _dbContext.Entry(existingItem)
+               .CurrentValues
+               .SetValues(updatedPost);
+            _dbContext.Posts.Update(existingItem);
             _dbContext.SaveChanges();
-            return currentPost;
+            return existingItem;
         }
 
         public IEnumerable<Post> GetAll()
@@ -67,12 +64,13 @@ namespace CS321_W5D2_BlogAPI.Infrastructure.Data
             // throw new NotImplementedException();
             return _dbContext.Posts.Include(p => p.Blog)
                 .ThenInclude(b => b.User);
+
         }
 
         public void Remove(int id)
         {
             // TODO: remove Post
-            // throw new NotImplementedException();
+            //throw new NotImplementedException();
             var currentPost = this.Get(id);
             if (currentPost != null)
             {

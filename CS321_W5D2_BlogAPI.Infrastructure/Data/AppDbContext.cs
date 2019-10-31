@@ -20,7 +20,8 @@ namespace CS321_W5D2_BlogAPI.Infrastructure.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // TODO: use Sqlite db
-            optionsBuilder.UseSqlite("Data Source = blog.db");
+            // optionsBuilder.UseSqlite("Data Source = blog.db");
+            optionsBuilder.UseSqlite("DataSource=../CS321_W5D2_BlogAPI.Infrastructure/blog.db");
         }
     }
 }
